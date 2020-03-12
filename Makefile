@@ -1,4 +1,24 @@
+#This makefile is designed to compile and link a simple CUDA application.
 #This Makefile is designed to be located in the same directory as your source code
+#*********************************************************************
+#To use this makefile you must make modifications where "TODO" appears.
+#There you will specify the name of the final executable and the object
+#files (.o files) needed to form the executable.
+#*********************************************************************
+#
+#The most common usage will be "make all", which will compile all .cu files
+#that have the same name as the .o files mentioned in OBJS, and then link
+#them to form the executable, a file whose name is the value of EXECUTABLE.
+#
+#If you want to compile a single .cu file, say, foo.cu, use the command
+#"make foo.o"
+#
+#If you want to force a complete rebuild, use these commands in sequence:
+#"make clean"
+#"make all"
+#
+#AUTHOR: Matthew Evett
+#VERSION: 2020.3
 
 CC=/usr/bin/g++
 NVCC=/usr/local/cuda/bin/nvcc
@@ -13,6 +33,10 @@ LIBDIRS=-L/usr/local/cuda/lib64
 INCDIRS=-I/usr/local/cuda/include
 #This is the command that will be used to remove file as part of a clean operation
 RM= rm -rf
+
+#Name of the executable
+#You must modify this!!  TODO:
+EXECUTABLE=testCUDA
 
 #You must modify this!!  TODO:
 #OBJS should be all the object files that will be linked to form the executable
@@ -38,21 +62,19 @@ OBJS=main.o secondFile.o
 	@echo 'Finished building: $<'
 	@echo ' '
 
-#You must modify this!!  TODO:
 # All Target.  The name on the right should be all the executables to be created (probably only one). 
-all: testCUDA
+all: $(EXECUTABLE)
 
 # Tool invocations.  Provide a rule for each executable.  
 # The right side of each rule lists all the object files the executable is comprised of. 
 #Evidently, the library directory specifications for cuda files are part of NVCC
-#You must modify this!!  TODO:
-testCUDA: $(OBJS) 
+$(EXECUTABLE): $(OBJS) 
 	@echo 'Building target: $@'
 	@echo 'Invoking: NVCC Linker'
-	$(NVCC) --cudart static $(CUDAFLAGS) -link -o  "testCUDA" $(OBJS) $(LIBS)
+	$(NVCC) --cudart static $(CUDAFLAGS) -link -o  $(EXECUTABLE) $(OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 
 clean:
-	-$(RM) testCUDA $(OBJS)
+	-$(RM) $(EXECUTABLE) $(OBJS)
