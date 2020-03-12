@@ -16,7 +16,7 @@ RM= rm -rf
 
 #You must modify this!!  TODO:
 #OBJS should be all the object files that will be linked to form the executable
-OBJS=file1.o file2.o
+OBJS=main.o secondFile.o
 
 
 #The following could be used in place of the default rule, replacing matrix_cuda with 
@@ -24,9 +24,7 @@ OBJS=file1.o file2.o
 #CU files includes on the right
 #matrix_cuda.o: matrix_cuda.cu
 #     $(NVCC) $(CUDAFLAGS) -o matrix_cuda.o  matrix_cuda.cu
-     
 
-  
 #This is the default rule for compiling cu files into corresponding object files
 #Evidently, the include directories for cuda files are part of NVCC   
 #-G generates debugging code for device, -g for the host.
@@ -34,7 +32,7 @@ OBJS=file1.o file2.o
 #-x cu specifies that the input file is to be treated as a cuda file, independent of the filename suffix
 #-o specifies the name of the resulting object file
 %.o: %.cu
-@echo 'Building file: $<'
+	@echo 'Building file: $<'
 	@echo 'Invoking: NVCC Compiler'
 	$(NVCC) -G -g -O0 --compile $(CUDAFLAGS) -x cu -o  "$@" "$<"
 	@echo 'Finished building: $<'
@@ -42,19 +40,19 @@ OBJS=file1.o file2.o
 
 #You must modify this!!  TODO:
 # All Target.  The name on the right should be all the executables to be created (probably only one). 
-all: RemoteProject
+all: testCUDA
 
 # Tool invocations.  Provide a rule for each executable.  
 # The right side of each rule lists all the object files the executable is comprised of. 
 #Evidently, the library directory specifications for cuda files are part of NVCC
 #You must modify this!!  TODO:
-RemoteProject: $(OBJS) 
+testCUDA: $(OBJS) 
 	@echo 'Building target: $@'
 	@echo 'Invoking: NVCC Linker'
-	$(NVCC) --cudart static $(CUDAFLAGS) -link -o  "RemoteProject" $(OBJS) $(LIBS)
+	$(NVCC) --cudart static $(CUDAFLAGS) -link -o  "testCUDA" $(OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 
 clean:
-    -$(RM) RemoteProject $(OBJS)
+	-$(RM) testCUDA $(OBJS)
