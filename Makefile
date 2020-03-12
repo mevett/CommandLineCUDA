@@ -34,26 +34,26 @@ OBJS=file1.o file2.o
 #-x cu specifies that the input file is to be treated as a cuda file, independent of the filename suffix
 #-o specifies the name of the resulting object file
 %.o: %.cu
-        @echo 'Building file: $<'
-        @echo 'Invoking: NVCC Compiler'
-        $(NVCC) -G -g -O0 --compile $(CUDAFLAGS) -x cu -o  "$@" "$<"
-        @echo 'Finished building: $<'
-        @echo ' '
+@echo 'Building file: $<'
+	@echo 'Invoking: NVCC Compiler'
+	$(NVCC) -G -g -O0 --compile $(CUDAFLAGS) -x cu -o  "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
 
 #You must modify this!!  TODO:
-# All Target.  The name on the right should be all the executables to be created (probably only one).                                                                                                                                 
+# All Target.  The name on the right should be all the executables to be created (probably only one). 
 all: RemoteProject
 
 # Tool invocations.  Provide a rule for each executable.  
 # The right side of each rule lists all the object files the executable is comprised of. 
-#Evidently, the library directory specifications for cuda files are part of NVCC                                                                                                                    
+#Evidently, the library directory specifications for cuda files are part of NVCC
 #You must modify this!!  TODO:
 RemoteProject: $(OBJS) 
-        @echo 'Building target: $@'
-        @echo 'Invoking: NVCC Linker'
-        $(NVCC) --cudart static $(CUDAFLAGS) -link -o  "RemoteProject" $(OBJS) $(LIBS)
-        @echo 'Finished building target: $@'
-        @echo ' '
+	@echo 'Building target: $@'
+	@echo 'Invoking: NVCC Linker'
+	$(NVCC) --cudart static $(CUDAFLAGS) -link -o  "RemoteProject" $(OBJS) $(LIBS)
+	@echo 'Finished building target: $@'
+	@echo ' '
 
 
 clean:
